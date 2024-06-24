@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Buyer's Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="date"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Buyer's Assistant</h1>
+        <div class="input-group">
+            <label for="halvingDate">Next Bitcoin Halving Date:</label>
+            <input type="date" id="halvingDate" required>
+        </div>
+        <div class="input-group">
+            <label for="currentPrice">Current Bitcoin Price (USD):</label>
+            <input type="number" id="currentPrice" required>
+        </div>
+        <div class="input-group">
+            <label for="fedRate">Current Federal Reserve Interest Rate (%):</label>
+            <input type="number" id="fedRate" step="0.25" required>
+        </div>
+        <div class="input-group">
+            <label for="trend">Current Market Trend:</label>
+            <select id="trend" required>
+                <option value="bullish">Bullish</option>
+                <option value="bearish">Bearish</option>
+                <option value="neutral">Neutral</option>
+            </select>
+        </div>
+        <button onclick="analyzeBuyingOpportunity()">Analyze Buying Opportunity</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function analyzeBuyingOpportunity() {
+            const halvingDate = new Date(document.getElementById('halvingDate').value);
+            const currentPrice = parseFloat(document.getElementById('currentPrice').value);
+            const fedRate = parseFloat(document.getElementById('fedRate').value);
+            const trend = document.getElementById('trend').value;
+            const today = new Date();
+
+            let advice = "";
+
+            // Check time to halving
+            const monthsToHalving = (halvingDate - today) / (1000 * 60 * 60 * 24 * 30);
+            if (monthsToHalving >= 12 && monthsToHalving <= 18) {
+                advice += "The current time is historically the best period to buy Bitcoin (12-18 months before halving). ";
+            } else if (monthsToHalving >= 6 && monthsToHalving < 12) {
+                advice += "This is generally a good time to buy Bitcoin (6-12 months before halving). ";
+            } else {
+                advice += "Be cautious, as we're outside the historically optimal buying window relative to the halving. ";
+            }
+
+            // Consider Fed rate
+            if (fedRate > 3) {
+                advice += "High interest rates may suppress crypto prices. Consider waiting for rate cuts. ";
+            } else {
+                advice += "Lower interest rates may be favorable for crypto investments. ";
+            }
+
+            // Market trend
+            if (trend === 'bullish') {
+                advice += "The market trend is bullish, which could be a good sign for buying. ";
+            } else if (trend === 'bearish') {
+                advice += "The market is bearish. Exercise caution and consider waiting for a trend reversal. ";
+            } else {
+                advice += "The market is neutral. Monitor closely for trend changes. ";
+            }
+
+            advice += "Remember to do your own research (DYOR) and only invest what you can afford to lose. Always be prepared for high volatility in the crypto market.";
+
+            document.getElementById('result').innerHTML = advice;
+        }
+    </script>
+</body>
+</html>
